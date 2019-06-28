@@ -32,10 +32,10 @@
 
         var packet = message.split(app.SEPARATOR,2);
 
-        post.innerHTML = `${packet[0]}:${packet[1]}`;
+        post.innerText = `${packet[0]}:${packet[1]}`;
 
         var messageBoard = document.querySelector(".message-board");
-        messageBoard.appendChild(post); 
+        messageBoard.prepend(post); 
     }
 
     app.handleMessageSend = function(event){
