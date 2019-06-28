@@ -49,6 +49,8 @@
         if( message ) {
             app.connection.send(packet);
         }
+
+        messageInput.value = '';
         return false;
     };
 
