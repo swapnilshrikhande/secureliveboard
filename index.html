@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>P2P Messenger</title>
+    <!-- Step 1 : Include Dependencies-->
+    <script src="lib/bugout.min.js"></script>
+</head>
+<body>
+
+<form class="message-form" >
+        <input class="message-input" type="text" placeholder="Enter Message Here..."></input>
+        <button class="message-send-button"> Send </button>
+</form>
+
+<div class="message-board">
+</div>
+
+<script>
+    var app = app || {};
+
+    app.connection = new Bugout("eternus-chat-room");
+    app.username   = "Guest";
+    app.SEPARATOR  = ';'
+
+    app.handleMessageReceived = function(address, message){
+        console.log("Message :"+message);
+        //append message to message board 
+        var post = document.createElement('div');
+
+        var packet = message.split(app.SEPARATOR,2);
+
+        post.innerHTML = `${packet[0]}:${packet[1]}`;
+
+        var messageBoard = document.querySelector(".message-board");
+        messageBoard.appendChild(post); 
+    }
+
+    app.handleMessageSend = function(event){
+        event.preventDefault();
+
+        var messageInput = document.querySelector(".message-input");
+        var message      = messageInput.value;
+
+        var packet       = `${app.username}${app.SEPARATOR}${message}`
+
+        if( message ) {
+            app.connection.send(packet);
+        }
+        return false;
+    };
+
+    app.initializeMessageSend = function(){
+        var messageSendButton = document.querySelector(".message-send-button");
+        messageSendButton.addEventListener('click', app.handleMessageSend);
+    };
+
+    app.initializeMessageReceive = function(){
+        app.connection.on("message",app.handleMessageReceived);
+    }
+
+    app.acceptUsername = function(){
+        app.username = prompt("Please enter user name") || app.username;
+    }
+
+    app.initializeApp = function(){
+        app.acceptUsername();
+        app.initializeMessageSend();
+        app.initializeMessageReceive();
+    };
+
+    window.addEventListener("load", function(){
+        app.initializeApp();
+    });
+
+</script>    
+</body>
+</html>
