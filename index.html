@@ -1,87 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>P2P Messenger</title>
-    <!-- Step 1 : Include Dependencies-->
-    <script src="lib/bugout.min.js"></script>
-    <style>
-        input.message-input {
-            width: 80%;
-        }
-    </style>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>P2P Messenger</title>
+        <!-- Step 1 : Include Dependencies-->
+        <script src="lib/bugout.min.js"></script>
+        <script src="lib/utils.js"></script>
+        <script src="app.js"></script>
+        <style>
+            input.message-input {
+                width: 80%;
+            }
 
-<form class="message-form" >
-    <input class="message-input" type="text" placeholder="Enter Message Here..."></input>
-    <button class="message-send-button"> Send </button>
-</form>
+            div.message-board div {
+                padding: 1%;
+            }
 
-<div class="message-board">
-</div>
+            #message-form-id {
+                margin-top: 2%;
+            }
 
-<script>
-    var app = app || {};
+        </style>
+    </head>
+    <body>
 
-    app.connection = new Bugout("eternus-chat-room");
-    app.username   = "Guest";
-    app.SEPARATOR  = ';'
+        <form class="login-form">
+            <input id="board-name-input" class="board-name" type="text" placeholder="Board Name">
+            </input>
+    
+            <input id="board-pass-input" class="password" type="password" placeholder="Password">
+            </input>
+    
+            <button class="open-board-button"> Open </button>
+            <button class="exit-board-button"> Logout </button>
+        </form>
 
-    app.handleMessageReceived = function(address, message){
-        console.log("Message :"+message);
-        //append message to message board 
-        var post = document.createElement('div');
+        <form id="message-form-id" class="message-form" style="display: none;">
+            <input class="message-input" type="text" placeholder="Enter Message Here...">
+            </input>
 
-        var packet = message.split(app.SEPARATOR,2);
-
-        post.innerText = `${packet[0]}:${packet[1]}`;
-
-        var messageBoard = document.querySelector(".message-board");
-        messageBoard.prepend(post); 
-    }
-
-    app.handleMessageSend = function(event){
-        event.preventDefault();
-
-        var messageInput = document.querySelector(".message-input");
-        var message      = messageInput.value;
-
-        var packet       = `${app.username}${app.SEPARATOR}${message}`
-
-        if( message ) {
-            app.connection.send(packet);
-        }
-
-        messageInput.value = '';
-        return false;
-    };
-
-    app.initializeMessageSend = function(){
-        var messageSendButton = document.querySelector(".message-send-button");
-        messageSendButton.addEventListener('click', app.handleMessageSend);
-    };
-
-    app.initializeMessageReceive = function(){
-        app.connection.on("message",app.handleMessageReceived);
-    }
-
-    app.acceptUsername = function(){
-        app.username = prompt("Please enter user name") || app.username;
-    }
-
-    app.initializeApp = function(){
-        app.acceptUsername();
-        app.initializeMessageSend();
-        app.initializeMessageReceive();
-    };
-
-    window.addEventListener("load", function(){
-        app.initializeApp();
-    });
-
-</script>    
-</body>
+            <button class="message-send-button"> Send </button>
+        </form>
+        
+        <div class="message-board">
+        </div>
+    </body>
 </html>
