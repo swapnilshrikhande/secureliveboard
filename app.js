@@ -1,3 +1,5 @@
+import digestMessage from "./lib/utils.js"
+
 var app = app || {};
 
 //basic state 
@@ -61,14 +63,14 @@ app.acceptUsername = function(){
 
 //Add credential support
 
-app.handleOpenBoardButton = async function(event) {
+app.handleOpenBoardButton = function(event) {
     event.preventDefault();
 
     let nameInput = document.getElementById("board-name-input").value;
     let passInput = document.getElementById("board-pass-input").value;
 
     let channelIdInput = nameInput + ":" + passInput;
-    const channelName = await digestMessage(channelIdInput);
+    const channelName = digestMessage(channelIdInput);
     //open specified board
     app.connection = new Bugout(channelName);
 
