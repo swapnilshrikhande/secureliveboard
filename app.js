@@ -68,9 +68,7 @@ app.handleOpenBoardButton = async function(event) {
     let passInput = document.getElementById("board-pass-input").value;
 
     let channelIdInput = nameInput + ":" + passInput;
-    console.log('channelIdInput='+channelIdInput);
     const channelName = await digestMessage(channelIdInput);
-    console.log("Connecting To..."+channelName);
     //open specified board
     app.connection = new Bugout(channelName);
 
@@ -80,9 +78,6 @@ app.handleOpenBoardButton = async function(event) {
 
     return false;
 };
-
-
-
 
 app.initializeOpenBoard = function() {
     var openBoardButton = document.querySelector(".open-board-button");
